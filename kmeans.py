@@ -14,7 +14,7 @@ N_DIM = 2
 K = 4
 
 
-def compute_cluster(arr, task_group, centroids, k):
+def find_clusters(arr, task_group, centroids, k):
     # find members of local chunk
     print(centroids)
     dists = cdist(arr, centroids, 'sqeuclidean')
@@ -43,16 +43,14 @@ def compute_cluster(arr, task_group, centroids, k):
 
 def kmeans(X, k, iterations):
     np.random.seed(42)
-    centroids = np.random.rand(k, N_DIM)
-    labels = np.zeros(N_DIM)
+    labels, centroids = np.zeros(N_DIM), np.random.rand(k, N_DIM)
 
     for iter_count in range(iterations):
-        labels, centroids = X.parallel_apply(compute_cluster,
+        labels, centroids = X.parallel_apply(find_clusters,
                                              centroids,
                                              k,
                                              flatten=lambda res: (np.concatenate([tup[0] for tup in res]), res[0][1]))
-        iter_count += 1
-        time.sleep(0.01)
+        time.sleep(0.01)  # debug
         print('iter {} done'.format(iter_count))
     print('done')
 
