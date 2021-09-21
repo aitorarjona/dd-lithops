@@ -1,4 +1,4 @@
 import lithops
 
-from .collectiveops import CollectiveOPs
-from .array import PartitionedArray
+from . import datasets
+from .core import get_group
